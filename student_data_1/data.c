@@ -4,7 +4,7 @@
 #define MAX_STUDENT_NUM 100		//最大学生人数
 
 //定义全局变量
-int students[MAX_STUDENT_NUM][2] = { {11,77}, {12,88}, {13,99} };
+int students[MAX_STUDENT_NUM][2];
 int student_count = 3; //实际录入学生人数
 
 //函数声明
@@ -17,6 +17,9 @@ void search_score();	//调用成绩查询函数
 void print_score();		//调用成绩打印函数
 void save_score();		//调用成绩保存函数
 void load_score();		//调用成绩载入函数
+void bubble_sort();     //调用冒泡排序函数
+void insertion_sort();  //调用插入排序函数
+void selection_sort();  //调用选择排序函数
 
 //main主函数入口
 int main()
@@ -61,6 +64,19 @@ void body_1()
 			printf("正在使用：学生成绩保存\n");
 			save_score();	//调用成绩保存函数
 			break;
+		case 7:
+			printf("正在使用：学生成绩读取\n");
+			load_score();	//调用成绩读取函数
+			break;
+		case 8:
+			printf("正在使用：成绩排序（冒泡排序）\n");
+			break;
+		case 9:
+			printf("正在使用：成绩排序（插入排序）\n");
+			break;
+		case 10:
+			printf("正在使用：成绩排序（选择排序）\n");
+			break;
 		case 0:
 			printf("谢谢使用，再见！\n");
 			break;
@@ -84,17 +100,21 @@ int menu() {
 	printf("4. 学生成绩查询\n");
 	printf("5. 学生成绩打印\n");
 	printf("6. 学生成绩保存\n");
+	printf("7. 学生成绩读取\n");
+	printf("8.按成绩升序（冒泡排序）\n");
+	printf("9.按成绩升序（插入排序）\n");
+	printf("10.按成绩升序（选择排序）\n");
 	printf("0. 退出系统\n");
 	printf("===========================\n");
-	printf("请输入你的选择 (0-5):> ");
+	printf("请输入你的选择 (0-10):> ");
 	scanf("%d", &choose);
 
-	if (choose < 0 || choose > 6)	//输入0——6之间的数	//  || 表示逻辑或(or)只要有一方为真即为真
+	if (choose < 0 || choose > 10)	//输入0——6之间的数	//  || 表示逻辑或(or)只要有一方为真即为真
 	{
 		printf("输入无效，请重新选择！\n");
 		return menu();	//无效数字，继续返回菜单选项
 	}
-	return choose;
+	return choose;		//返回选择
 }
 
 //成绩录入函数
@@ -271,4 +291,10 @@ void load_score()
 
 	fclose(fp);
 	printf("已加载 %d 条学生成绩记录。\n", student_count);
+}
+
+//冒泡排序
+void bubble_sort()
+{
+
 }
