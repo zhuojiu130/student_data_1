@@ -101,8 +101,8 @@ int menu() {
 	printf("5. 学生成绩打印\n");
 	printf("6. 学生成绩保存\n");
 	printf("7. 学生成绩读取\n");
-	printf("8.按成绩升序（冒泡排序）\n");
-	printf("9.按成绩升序（插入排序）\n");
+	printf("8. 按成绩升序（冒泡排序）\n");
+	printf("9. 按成绩升序（插入排序）\n");
 	printf("10.按成绩升序（选择排序）\n");
 	printf("0. 退出系统\n");
 	printf("===========================\n");
@@ -296,5 +296,19 @@ void load_score()
 //冒泡排序
 void bubble_sort()
 {
-
+	for (int i = 0; i < student_count - 1; i++)
+	{  // 遍历学生列表
+		for (int j = 0; j < student_count - i - 1; j++) 	// 从0到未排序部分的末尾
+		{
+			if (students[j][1] > students[j + 1][1]) 	// 如果前一个成绩大于后一个
+			{
+				int temp_id = students[j][0];			// 交换学号和成绩
+				int temp_score = students[j][1];
+				students[j][0] = students[j + 1][0];
+				students[j][1] = students[j + 1][1];
+				students[j + 1][0] = temp_id;
+				students[j + 1][1] = temp_score;
+			}
+		}
+	}
 }
