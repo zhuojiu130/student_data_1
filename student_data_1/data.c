@@ -5,7 +5,7 @@
 
 //定义全局变量
 int students[MAX_STUDENT_NUM][2];
-int student_count = 3; //实际录入学生人数
+int student_count = 6; //实际录入学生人数
 
 //函数声明
 int menu(); 			//调用菜单函数
@@ -70,6 +70,7 @@ void body_1()
 			break;
 		case 8:
 			printf("正在使用：成绩排序（冒泡排序）\n");
+			bubble_sort();
 			break;
 		case 9:
 			printf("正在使用：成绩排序（插入排序）\n");
@@ -78,7 +79,14 @@ void body_1()
 			printf("正在使用：成绩排序（选择排序）\n");
 			break;
 		case 0:
-			printf("谢谢使用，再见！\n");
+			printf("确定要退出吗？(1表示是, 0表示否): ");
+			int confirm;
+			scanf("%d", &confirm);
+			if (confirm == 1)
+			{
+				printf("谢谢使用，再见！\n");
+				exit(0);
+			}
 			break;
 		default:
 			printf("对不起，没有这个菜单项！请重新输入。\n");
@@ -121,32 +129,43 @@ int menu() {
 void input_score()
 {
 	printf("准备成绩录入......\n");
-
-	for (int i = 0; i < student_count; i++)		// 遍历已录入的学生数量
+	int continue_input = 1;  // 控制是否继续录入
+	while (continue_input && student_count < MAX_STUDENT_NUM)
 	{
-		do	//先执行循环体，再检查条件是否满足
+		int id, score;
+		printf("请输入学号: ");
+		scanf("%d", &id);
+		printf("请输入成绩 (0-100): ");
+		scanf("%d", &score);
+
+		if (score < 0 || score > 100)
 		{
-			printf("请输入第%d个人的学号: ", i + 1);	//循环体
-			scanf("%d", &students[i][0]);
+			printf("成绩无效，请输入0到100之间的分数。\n");
+			continue;
+		}
 
-		} while (students[i][0] <= 0);  // 学号应为正数		//while为条件
+		students[student_count][0] = id;
+		students[student_count][1] = score;
+		student_count++;
+		printf("成绩录入成功！\n");
 
-		do
+		// 显示所有已录入的学生成绩
+		printf("当前所有学生成绩:\n");
+		printf("学号\t-\t成绩\n");
+		for (int i = 0; i < student_count; i++)
 		{
-			printf("请输入第%d个人的成绩 (0-100): ", i + 1);
-			scanf("%d", &students[i][1]);
-
-		} while (students[i][1] < 0 || students[i][1] > 100);  // 成绩在 0-100 范围内	输入不正确的数值会重新进入循环
+			printf("%d\t-\t%d\n", students[i][0], students[i][1]);
+		}
+		printf("是否继续录入？ (1表示是, 0表示否): ");
+		scanf("%d", &continue_input);
 	}
 
-	//打印成绩
-	for (int i = 0; i < student_count; i++)
+	if (student_count >= MAX_STUDENT_NUM)
 	{
-		printf("第%d个学生的学号-成绩:%d-%d\n", i + 1, students[i][0], students[i][1]);
+		printf("学生人数已满，无法录入更多成绩。\n");
 	}
 
 	Sleep(2000);  // 暂停 2 秒，便于查看输出
-
 }
 
 
@@ -202,6 +221,9 @@ void delete_score()
 	{
 		printf("未找到该学号的学生。\n");
 	}
+
+	save_score();
+	load_score();
 
 	Sleep(2000);  // 暂停 2 秒，便于查看输出
 }
@@ -311,4 +333,21 @@ void bubble_sort()
 			}
 		}
 	}
+
+	printf("学号\t-\t成绩\n");	//格式为 "学号 - 成绩"，使用 \t 制表符来对齐"学号"和"成绩"这两列
+	for (int i = 0; i < student_count; i++)
+	{
+		printf("%d\t-\t%d\n", students[i][0], students[i][1]);	//使用 printf 输出学号和成绩，并用 \t 制表符保持列的对齐
+	}
+	save_score();
+	load_score();
+}
+
+//插入排序
+void insertion_sort()
+{
+
+
+	save_score();
+	load_score();
 }
