@@ -1,9 +1,7 @@
 #define _CRT_SECURE_NO_WARNINGS
-#define FILE_PATH "D:\\Dev c wenjian\\student_data\\score.txt" //将文件路径定义为常量
 #include <stdio.h>
 #include <windows.h>			// 调用 Sleep() 函数
 #define MAX_STUDENT_NUM 100		//最大学生人数
-
 
 //定义全局变量
 int students[MAX_STUDENT_NUM][2];
@@ -23,6 +21,7 @@ void bubble_sort();     //冒泡排序函数
 void insertion_sort();  //插入排序函数
 void selection_sort();  //选择排序函数
 
+
 //main主函数入口
 int main()
 {
@@ -30,6 +29,7 @@ int main()
 	body_1();			// 调用功能选择函数
 	return 0;
 }
+
 
 // 功能选择函数
 void body_1()
@@ -77,12 +77,12 @@ void body_1()
 			break;
 		case 9:
 			printf("正在使用：成绩排序（插入排序）\n");
-
+			insertion_sort();
 			print_score();	//排序后打印成绩
 			break;
 		case 10:
 			printf("正在使用：成绩排序（选择排序）\n");
-
+			selection_sort();
 			print_score();	//排序后打印成绩
 			break;
 		case 0:
@@ -325,8 +325,8 @@ void load_score()
 //冒泡排序
 void bubble_sort()
 {
-	for (int i = 0; i < student_count - 1; i++)
-	{  // 遍历学生列表
+	for (int i = 0; i < student_count - 1; i++)			// 遍历学生列表
+	{
 		for (int j = 0; j < student_count - i - 1; j++) 	// 从0到未排序部分的末尾
 		{
 			if (students[j][1] > students[j + 1][1]) 	// 如果前一个成绩大于后一个
@@ -344,15 +344,40 @@ void bubble_sort()
 	load_score();
 }
 
+//选择排序
+void selection_sort()
+{
+	for (int i = 0; i < student_count - 1; i++)			// 遍历学生列表
+	{
+		int min_idx = i;								// 假设第i个是最小的
+		for (int j = i + 1; j < student_count; j++)		// 找到未排序部分的最小成绩
+		{
+			if (students[j][1] < students[min_idx][1])
+			{
+				min_idx = j;							// 更新最小值的索引
+			}
+		}
+
+		// 交换最小值和当前元素
+		int temp_id = students[min_idx][0];
+		int temp_score = students[min_idx][1];
+		students[min_idx][0] = students[i][0];
+		students[min_idx][1] = students[i][1];
+
+	}
+	save_score();
+	load_score();
+}
+
 //插入排序
 void insertion_sort()
 {
 	for (int i = 1; i < student_count; i++)		 // 从第二个元素开始
-	{   
+	{
 		int id = students[i][0];                 // 保存当前学生的学号
 		int score = students[i][1];              // 保存当前学生的成绩
 		int j = i - 1;
-		
+
 		while (j >= 0 && students[j][1] > score) // 查找合适位置插入
 		{
 			students[j + 1][0] = students[j][0];
@@ -362,30 +387,6 @@ void insertion_sort()
 		students[j + 1][0] = id;                 // 插入学号
 		students[j + 1][1] = score;              // 插入成绩
 	}
-
 	save_score();
 	load_score();
-}
-
-//选择排序
-void selection_sort()
-{
-	for (int i = 0; i < student_count - 1; i++)			// 遍历学生列表
-	{   
-		int min_idx = i;								// 假设第i个是最小的
-		for (int j = i + 1; j < student_count; j++)		// 找到未排序部分的最小成绩
-		{  
-			if (students[j][1] < students[min_idx][1]) 
-			{
-				min_idx = j;							// 更新最小值的索引
-			}
-		}
-		// 交换最小值和当前元素
-		int temp_id = students[min_idx][0];
-		int temp_score = students[min_idx][1];
-		students[min_idx][0] = students[i][0];
-		students[min_idx][1] = students[i][1];
-
-		save_score();
-		load_score();
 }
