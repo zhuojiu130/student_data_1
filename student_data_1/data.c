@@ -106,7 +106,8 @@ void body_1()
 }
 
 // 菜单函数
-int menu() {
+int menu()
+{
 	int choose;
 	printf("===== 学生成绩管理系统 =====\n");
 	printf("1. 学生成绩录入\n");
@@ -124,7 +125,7 @@ int menu() {
 	printf("请输入你的选择 (0-10):> ");
 	scanf("%d", &choose);
 
-	if (choose < 0 || choose > 10)	//输入0——6之间的数	//  || 表示逻辑或(or)只要有一方为真即为真
+	if (choose < 0 || choose > 10)	//输入0——10之间的数	//  || 表示逻辑或(or)只要有一方为真即为真
 	{
 		printf("输入无效，请重新选择！\n");
 		return menu();	//无效数字，继续返回菜单选项
@@ -211,27 +212,32 @@ void delete_score()
 	printf("请输入要删除成绩的学生学号: ");
 	scanf("%d", &id);
 
-	int found = 0;	//found标志变量，用来记录是否找到了对应的学号，初始化为 0（即未找到）	
+	int found = 0;
 	for (int i = 0; i < student_count; i++)
 	{
 		if (students[i][0] == id)
 		{
-			students[i][0] = 0;  // 将学号和成绩重置为 0，表示删除
-			students[i][1] = 0;
+			// 将后续元素向前移动一位
+			for (int j = i; j < student_count - 1; j++)
+			{
+				students[j][0] = students[j + 1][0];
+				students[j][1] = students[j + 1][1];
+			}
+			student_count--;  // 减少学生总数
 			printf("成绩已删除！\n");
-			found = 1;	//found为1即为找到
+			found = 1;
 			break;
 		}
 	}
 
-	if (!found)		//遍历完数组后 found 仍然为 0，提示该学号不存在或未找到
+	if (!found)
 	{
 		printf("未找到该学号的学生。\n");
 	}
-
-	save_score();
-	load_score();
-
+	else
+	{
+		save_score();  // 保存删除后的成绩记录
+	}
 	Sleep(2000);  // 暂停 2 秒，便于查看输出
 }
 
@@ -252,7 +258,6 @@ void search_score()
 			break;
 		}
 	}
-
 
 	//跳出循环后，found值依旧没有改变初始值(0)，则提示没有找到学生
 	if (!found)		//遍历完数组后 found 仍然为 0，提示该学号不存在或未找到	//！取反  ！1 = 0； ！0 = 1；	//0取反则为1；为true 执行if语句
@@ -302,7 +307,7 @@ void save_score()
 	}
 }
 
-// 成绩加载函数
+// 成绩载入函数
 void load_score()
 {
 	FILE* fp = fopen("D:\\Dev c wenjian\\student_data\\score.txt", "r");
@@ -325,14 +330,14 @@ void load_score()
 //冒泡排序
 void bubble_sort()
 {
-	for (int i = 0; i < student_count - 1; i++)			// 遍历学生列表
+	for (int i = 0; i < student_count - 1; i++)			// 外侧循环控制轮数
 	{
 		for (int j = 0; j < student_count - i - 1; j++) 	// 从0到未排序部分的末尾
 		{
 			if (students[j][1] > students[j + 1][1]) 	// 如果前一个成绩大于后一个
 			{
-				int temp_id = students[j][0];			// 交换学号和成绩
-				int temp_score = students[j][1];
+				int temp_id = students[j][0];			//暂存当前学号
+				int temp_score = students[j][1];		//暂存当前成绩
 				students[j][0] = students[j + 1][0];
 				students[j][1] = students[j + 1][1];
 				students[j + 1][0] = temp_id;
@@ -340,33 +345,33 @@ void bubble_sort()
 			}
 		}
 	}
-	save_score();
-	load_score();
 }
 
 //选择排序
 void selection_sort()
 {
-	for (int i = 0; i < student_count - 1; i++)			// 遍历学生列表
+	printf("选择排序\n");
+	for (int i = 0; i < student_count - 1; i++)
 	{
-		int min_idx = i;								// 假设第i个是最小的
-		for (int j = i + 1; j < student_count; j++)		// 找到未排序部分的最小成绩
+		int minIndex = i;	// 假设当前元素为最小值的位置
+		for (int j = i + 1; j < student_count; j++)	// 从i+1开始，寻找未排序部分中的最小值
 		{
-			if (students[j][1] < students[min_idx][1])
+			if (students[j][1] < students[minIndex][1])		// 如果找到比当前最小值更小的成绩
 			{
-				min_idx = j;							// 更新最小值的索引
+				minIndex = j;	// 就将minIndex更新最小值的位置
 			}
 		}
-
-		// 交换最小值和当前元素
-		int temp_id = students[min_idx][0];
-		int temp_score = students[min_idx][1];
-		students[min_idx][0] = students[i][0];
-		students[min_idx][1] = students[i][1];
-
+		if (minIndex != i)	// 如果找到的最小值不是当前元素
+		{
+			// 交换当前元素和找到的最小元素的位置
+			int temp_id = students[i][0];
+			int temp_score = students[i][1];
+			students[i][0] = students[minIndex][0];
+			students[i][1] = students[minIndex][1];
+			students[minIndex][0] = temp_id;
+			students[minIndex][1] = temp_score;
+		}
 	}
-	save_score();
-	load_score();
 }
 
 //插入排序
@@ -378,7 +383,7 @@ void insertion_sort()
 		int score = students[i][1];              // 保存当前学生的成绩
 		int j = i - 1;
 
-		while (j >= 0 && students[j][1] > score) // 查找合适位置插入
+		while (j >= 0 && students[j][1] > score)
 		{
 			students[j + 1][0] = students[j][0];
 			students[j + 1][1] = students[j][1];
@@ -387,6 +392,4 @@ void insertion_sort()
 		students[j + 1][0] = id;                 // 插入学号
 		students[j + 1][1] = score;              // 插入成绩
 	}
-	save_score();
-	load_score();
 }
